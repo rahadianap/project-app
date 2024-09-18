@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use Filament\Support\Facades\FilamentColor;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Filament\Support\Colors\Color;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,5 +17,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Gate::policy(\Spatie\Permission\Models\Role::class, \App\Policies\RolePolicy::class);
+        FilamentColor::register([
+            'ijo' => Color::hex('#000000'),
+        ]);
     }
 }

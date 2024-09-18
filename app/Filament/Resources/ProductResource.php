@@ -30,6 +30,10 @@ class ProductResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationGroup = 'Master Data';
+
+    protected static ?string $navigationLabel = 'Barang';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -59,14 +63,16 @@ class ProductResource extends Resource
                                 TextInput::make('merk')
                                     ->label(__('Merk Barang'))
                                     ->maxLength(length: 20),
-                                Select::make('satuan')
+                                Select::make('unit_id')
+                                    ->relationship('unit', 'nama')
                                     ->label('Satuan')
-                                    ->options(Unit::all()->pluck('nama', 'nama'))
-                                    ->searchable(),
-                                Select::make('kategori')
+                                    ->searchable()
+                                    ->preload(),
+                                Select::make('category_id')
+                                    ->relationship('category', 'nama')
                                     ->label('Kategori')
-                                    ->options(Category::all()->pluck('nama', 'nama'))
-                                    ->searchable(),
+                                    ->searchable()
+                                    ->preload(),
                                 TextInput::make('ukuran')
                                     ->label(__('Ukuran'))
                                     ->numeric()
@@ -164,7 +170,7 @@ class ProductResource extends Resource
                     ->label(__('Nama Barang'))
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('kategori')
+                Tables\Columns\TextColumn::make('category.nama')
                     ->label(__('Kategori'))
                     ->sortable()
                     ->searchable(),

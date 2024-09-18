@@ -24,6 +24,10 @@ class CategoryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationGroup = 'Master Data';
+
+    protected static ?string $navigationLabel = 'Kategori Barang';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -100,7 +104,7 @@ class CategoryResource extends Resource
     public static function getRelations(): array
     {
         return [
-            ProductsRelationManager::class,
+            RelationManagers\CategoryProductsRelationManager::class,
         ];
     }
 

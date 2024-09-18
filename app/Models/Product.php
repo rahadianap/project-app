@@ -7,11 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Permission\Traits\HasRoles;
+use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use App\Models\Category;
 
 class Product extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasRoles;
+    use HasPanelShield;
 
     protected $table = 'dbo.mstbarang';
 
@@ -50,6 +53,11 @@ class Product extends Model
 
     public function category(): BelongsTo
     {
-        return $this->belongsTo(Category::class, 'kategori');
+        return $this->belongsTo(Category::class, 'category_id');
+    }
+
+    public function unit(): BelongsTo
+    {
+        return $this->belongsTo(Unit::class, 'satuan');
     }
 }

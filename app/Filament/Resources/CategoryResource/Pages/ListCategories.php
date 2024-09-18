@@ -23,9 +23,10 @@ class ListCategories extends ListRecords
                 ->successNotification(
                     Notification::make()
                         ->success()
-                        ->color(color: 'success')
+                        ->color(color: 'ijo')
                         ->title('Created Successfully')
                         ->body('Data Kategori baru berhasil dibuat!')
+                        ->send()
                 ),
         ];
     }

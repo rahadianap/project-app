@@ -23,6 +23,7 @@ use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Notifications\Livewire\Notifications;
 use Filament\Support\Enums\Alignment;
 use Filament\Support\Enums\VerticalAlignment;
+use Filament\Navigation\NavigationGroup;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -46,8 +47,6 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -65,6 +64,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->sidebarCollapsibleOnDesktop()
             ->maxContentWidth(MaxWidth::Full)
+            ->readOnlyRelationManagersOnResourceViewPagesByDefault(false)
             ->plugins([
                 BreezyCore::make(),
                 FilamentShieldPlugin::make()

@@ -3,8 +3,6 @@
 namespace App\Filament\Resources\CategoryResource\Pages;
 
 use App\Filament\Resources\CategoryResource;
-use App\Models\DetailProduct;
-use Filament\Pages\Actions;
 use Filament\Resources\Pages\ViewRecord;
 
 class ViewCategory extends ViewRecord

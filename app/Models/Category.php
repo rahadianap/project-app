@@ -6,13 +6,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Permission\Traits\HasRoles;
+use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use App\Models\Product;
 
 class Category extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasRoles;
+    use HasPanelShield;
 
     protected $table = 'dbo.mstkategoribarang';
+
+    protected $guard_name = 'web';
 
     protected $fillable = [
         'nama',
@@ -27,8 +32,8 @@ class Category extends Model
         'deleted_by',
     ];
 
-    public function products(): HasMany
+    public function category_products(): HasMany
     {
-        return $this->hasMany(Product::class, 'id');
+        return $this->hasMany(Product::class);
     }
 }
