@@ -3,13 +3,11 @@
 namespace App\Filament\Resources\ProductResource\Pages;
 
 use App\Filament\Resources\ProductResource;
-use Filament\Actions;
 use App\Models\DetailProduct;
 use Filament\Resources\Pages\CreateRecord;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Model;
-use Filament\Forms\Get;
 
 class CreateProduct extends CreateRecord
 {

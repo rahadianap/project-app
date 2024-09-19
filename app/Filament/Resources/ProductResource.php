@@ -20,15 +20,15 @@ use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Category;
-use App\Models\Unit;
 use Pelmered\FilamentMoneyField\Forms\Components\MoneyInput;
 
 class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+
+    protected static ?int $navigationSort = 1;
 
     protected static ?string $navigationGroup = 'Master Data';
 

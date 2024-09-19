@@ -2,34 +2,30 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\KecamatanResource\Pages;
-use App\Filament\Resources\KecamatanResource\RelationManagers;
-use App\Models\Kecamatan;
+use App\Filament\Resources\GroupRekananResource\Pages;
+use App\Filament\Resources\GroupRekananResource\RelationManagers;
+use App\Models\GroupRekanan;
 use Filament\Forms;
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Forms\Components\Card;
 use Filament\Notifications\Notification;
-use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Select;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class KecamatanResource extends Resource
+class GroupRekananResource extends Resource
 {
-    protected static ?string $model = Kecamatan::class;
+    protected static ?string $model = GroupRekanan::class;
 
+    protected static ?int $navigationSort = 9;
 
-
-    protected static ?int $navigationSort = 6;
+    protected static ?string $navigationLabel = 'Group Rekanan';
 
     protected static ?string $navigationGroup = 'Master Data';
-
-    protected static ?string $navigationLabel = 'Kecamatan';
 
     public static function form(Form $form): Form
     {
@@ -37,18 +33,10 @@ class KecamatanResource extends Resource
             ->schema([
                 Card::make()
                     ->schema([
-                        Grid::make()
-                            ->schema([
-                                TextInput::make('nama')
-                                    ->label(__('Nama Kecamatan'))
-                                    ->required()
-                                    ->maxLength(length: 25),
-                                Select::make('kota_id')
-                                    ->relationship('city', 'nama')
-                                    ->label('Nama Kota')
-                                    ->searchable()
-                                    ->preload(),
-                            ])
+                        TextInput::make('nama')
+                            ->label(__('Nama Group'))
+                            ->required()
+                            ->maxLength(length: 25),
                     ])
             ]);
     }
@@ -58,7 +46,7 @@ class KecamatanResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make(name: 'nama')
-                    ->label(__('Nama Kecamatan'))
+                    ->label(__('Nama Group'))
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -87,7 +75,7 @@ class KecamatanResource extends Resource
                             ->success()
                             ->color(color: 'success')
                             ->title('Updated Successfully')
-                            ->body('Data Kecamatan berhasil diubah!')
+                            ->body('Data Kategori berhasil diubah!')
                     ),
                 Tables\Actions\DeleteAction::make()
                     ->after(function (Model $record): Model {
@@ -100,7 +88,7 @@ class KecamatanResource extends Resource
                             ->success()
                             ->color('danger')
                             ->title('Deleted Successfully')
-                            ->body('Data Kecamatan berhasil dihapus!'),
+                            ->body('Data Kategori berhasil dihapus!'),
                     ),
             ])
             ->bulkActions([
@@ -115,15 +103,14 @@ class KecamatanResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\VillagesRelationManager::class,
+            //
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListKecamatans::route('/'),
-            'view' => Pages\ViewKecamatan::route('/{record}'),
+            'index' => Pages\ListGroupRekanans::route('/'),
         ];
     }
 

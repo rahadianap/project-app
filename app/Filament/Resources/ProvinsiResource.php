@@ -21,11 +21,13 @@ class ProvinsiResource extends Resource
 {
     protected static ?string $model = Provinsi::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationGroup = 'Master Data';
+
+    protected static ?int $navigationSort = 4;
 
     protected static ?string $navigationLabel = 'Provinsi';
+
+    protected static ?string $navigationGroup = 'Master Data';
 
     public static function form(Form $form): Form
     {

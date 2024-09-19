@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('mstrekanan', function (Blueprint $table) {
             $table->id();
             $table->string('kode', 30);
-            $table->integer('no_ktp')->unique();
+            $table->string('no_ktp', 16)->unique();
             $table->string('npwp', length: 100);
             $table->string('nama', 100);
             $table->text('alamat')->nullable();
@@ -25,7 +25,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('kecamatan_id')->nullable();
             $table->unsignedBigInteger('kelurahan_id')->nullable();
             $table->string('email')->nullable();
-            $table->string('group_rekanan', 100)->nullable();
+            $table->unsignedBigInteger('group_id')->nullable();
             $table->string('agama', 100)->nullable();
             $table->string('pendidikan', 100)->nullable();
             $table->string('pekerjaan', 100)->nullable();
@@ -46,6 +46,7 @@ return new class extends Migration {
             $table->foreign(columns: 'kota_id')->references('id')->on('mstkotakabupaten');
             $table->foreign(columns: 'kecamatan_id')->references('id')->on('mstkecamatan');
             $table->foreign(columns: 'kelurahan_id')->references('id')->on('mstkelurahandesa');
+            $table->foreign(columns: 'group_id')->references('id')->on('mstgrouprekanan');
         });
     }
 

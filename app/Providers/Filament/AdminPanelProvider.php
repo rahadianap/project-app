@@ -65,6 +65,14 @@ class AdminPanelProvider extends PanelProvider
             ->sidebarCollapsibleOnDesktop()
             ->maxContentWidth(MaxWidth::Full)
             ->readOnlyRelationManagersOnResourceViewPagesByDefault(false)
+            ->navigationGroups([
+                NavigationGroup::make()
+                    ->label('Master Data')
+                    ->icon('heroicon-o-circle-stack'),
+                NavigationGroup::make()
+                    ->label(label: 'Pengaturan')
+                    ->icon('heroicon-o-cog-6-tooth'),
+            ])
             ->plugins([
                 BreezyCore::make(),
                 FilamentShieldPlugin::make()

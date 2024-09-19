@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\CategoryResource\Pages;
+namespace App\Filament\Resources\GroupRekananResource\Pages;
 
-use App\Filament\Resources\CategoryResource;
+use App\Filament\Resources\GroupRekananResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Notifications\Notification;
 
-class ListCategories extends ListRecords
+class ListGroupRekanans extends ListRecords
 {
-    protected static string $resource = CategoryResource::class;
+    protected static string $resource = GroupRekananResource::class;
 
     protected function getHeaderActions(): array
     {
@@ -25,7 +25,7 @@ class ListCategories extends ListRecords
                         ->success()
                         ->color(color: 'success')
                         ->title('Created Successfully')
-                        ->body('Data Kategori baru berhasil dibuat!')
+                        ->body('Data Group Rekanan baru berhasil dibuat!')
                 ),
         ];
     }

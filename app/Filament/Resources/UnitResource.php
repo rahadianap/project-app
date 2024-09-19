@@ -20,7 +20,9 @@ class UnitResource extends Resource
 {
     protected static ?string $model = Unit::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+
+    protected static ?int $navigationSort = 3;
 
     protected static ?string $navigationGroup = 'Master Data';
 

@@ -23,7 +23,9 @@ class KelurahanResource extends Resource
 {
     protected static ?string $model = Kelurahan::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+
+    protected static ?int $navigationSort = 7;
 
     protected static ?string $navigationGroup = 'Master Data';
 

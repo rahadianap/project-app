@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -43,7 +44,7 @@ class Product extends Model
         'pajak' => 'boolean',
         'statusupload' => 'boolean',
         'statusdiperbarui' => 'boolean',
-        'nonaktif' => 'boolean'
+        'isaktif' => 'boolean'
     ];
 
     public function detail_barang(): HasOne
@@ -59,5 +60,11 @@ class Product extends Model
     public function unit(): BelongsTo
     {
         return $this->belongsTo(Unit::class, 'satuan');
+    }
+
+    public function suppliers(): BelongsToMany
+    {
+        return $this->belongsToMany(Rekanan::class, 'product_rekanan', 'rekanan_id')
+            ->withPivot('rekanan_id');
     }
 }

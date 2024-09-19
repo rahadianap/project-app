@@ -23,7 +23,9 @@ class KotaResource extends Resource
 {
     protected static ?string $model = Kota::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+
+    protected static ?int $navigationSort = 5;
 
     protected static ?string $navigationGroup = 'Master Data';
 
