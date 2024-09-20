@@ -5,21 +5,28 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Traits\HasRoles;
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Unit extends Model
+class ChartAccount extends Model
 {
     use HasFactory, SoftDeletes, HasRoles;
     use HasPanelShield;
 
-    protected $table = 'dbo.mstsatuan';
+    protected $table = 'dbo.mstchartaccount';
 
     protected $guard_name = 'web';
 
     protected $fillable = [
+        'nomoraccount',
         'nama',
+        'kelompokaccount',
+        'level',
+        'kasbank',
+        'tipeaccount',
         'userakses',
         'logakses',
         'statusupload',
@@ -31,8 +38,13 @@ class Unit extends Model
         'deleted_by',
     ];
 
-    public function unit_products(): HasMany
+    public function group_coa(): BelongsTo
     {
-        return $this->hasMany(Product::class, 'id');
+        return $this->belongsTo(KelompokAccount::class, 'kelompokaccount');
+    }
+
+    public function details(): HasMany
+    {
+        return $this->hasMany(DetailChartAccount::class);
     }
 }

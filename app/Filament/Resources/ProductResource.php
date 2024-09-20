@@ -39,6 +39,7 @@ class ProductResource extends Resource
         return $form
             ->schema([
                 Section::make('Data Barang')
+                    ->collapsible(true)
                     ->schema([
                         Fieldset::make('Data Barang')
                             ->schema([
@@ -213,7 +214,7 @@ class ProductResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\RekanansRelationManager::class,
         ];
     }
 

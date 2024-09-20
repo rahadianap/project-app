@@ -1,15 +1,17 @@
 <?php
 
-namespace App\Filament\Resources\RekananResource\Pages;
+namespace App\Filament\Resources\ChartAccountResource\Pages;
 
-use App\Filament\Resources\RekananResource;
+use App\Filament\Resources\ChartAccountResource;
+use App\Models\DetailChartAccount;
+use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
-use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Filament\Notifications\Notification;
+use Illuminate\Database\Eloquent\Model;
 
-class CreateRekanan extends CreateRecord
+class CreateChartAccount extends CreateRecord
 {
-    protected static string $resource = RekananResource::class;
+    protected static string $resource = ChartAccountResource::class;
 
     protected function getRedirectUrl(): string
     {
@@ -18,7 +20,6 @@ class CreateRekanan extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $data['kode'] = IdGenerator::generate(['table' => 'mstrekanan', 'field' => 'kode', 'length' => 8, 'prefix' => 'CLG-']);
         $data['created_by'] = Auth() ? Auth()->user()->name : null;
         return $data;
     }
@@ -29,6 +30,6 @@ class CreateRekanan extends CreateRecord
             ->success()
             ->color(color: 'success')
             ->title('Created Successfully')
-            ->body('Data Rekanan baru berhasil dibuat!');
+            ->body('Data COA baru berhasil dibuat!');
     }
 }

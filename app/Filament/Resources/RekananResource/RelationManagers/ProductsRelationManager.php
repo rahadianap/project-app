@@ -3,11 +3,9 @@
 namespace App\Filament\Resources\RekananResource\RelationManagers;
 
 use Filament\Forms;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
-use Filament\Tables\Actions\AttachAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -15,8 +13,6 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class ProductsRelationManager extends RelationManager
 {
     protected static string $relationship = 'products';
-
-    protected static ?string $inverseRelationship = 'suppliers';
 
     public function form(Form $form): Form
     {
@@ -39,9 +35,11 @@ class ProductsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\AttachAction::make(),
+                Tables\Actions\AttachAction::make()
+                    ->preloadRecordSelect()
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\DetachAction::make(),
             ])
             ->bulkActions([

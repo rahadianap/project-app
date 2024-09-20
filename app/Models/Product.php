@@ -19,14 +19,16 @@ class Product extends Model
 
     protected $table = 'dbo.mstbarang';
 
+    protected $guard_name = 'web';
+
     protected $fillable = [
         'kode',
         'kodebarcode',
         'nama',
         'namaalias',
         'merk',
-        'satuan',
-        'kategori',
+        'unit_id',
+        'category_id',
         'ukuran',
         'pajak',
         'userakses',
@@ -59,12 +61,11 @@ class Product extends Model
 
     public function unit(): BelongsTo
     {
-        return $this->belongsTo(Unit::class, 'satuan');
+        return $this->belongsTo(Unit::class, 'unit_id');
     }
 
-    public function suppliers(): BelongsToMany
+    public function rekanans(): BelongsToMany
     {
-        return $this->belongsToMany(Rekanan::class, 'product_rekanan', 'rekanan_id')
-            ->withPivot('rekanan_id');
+        return $this->belongsToMany(Rekanan::class);
     }
 }

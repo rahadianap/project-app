@@ -4,22 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Traits\HasRoles;
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Unit extends Model
+class KelompokAccount extends Model
 {
     use HasFactory, SoftDeletes, HasRoles;
     use HasPanelShield;
 
-    protected $table = 'dbo.mstsatuan';
+    protected $table = 'dbo.mstkelompokaccount';
 
     protected $guard_name = 'web';
 
     protected $fillable = [
+        'kode',
+        'kelompok',
         'nama',
+        'debit',
+        'kredit',
         'userakses',
         'logakses',
         'statusupload',
@@ -31,8 +35,8 @@ class Unit extends Model
         'deleted_by',
     ];
 
-    public function unit_products(): HasMany
+    public function coas(): HasMany
     {
-        return $this->hasMany(Product::class, 'id');
+        return $this->hasMany(ChartAccount::class);
     }
 }

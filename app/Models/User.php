@@ -14,6 +14,8 @@ class User extends Authenticatable
     use HasFactory, Notifiable, HasRoles;
     use HasPanelShield;
 
+    protected $guard_name = 'web';
+
     protected $fillable = [
         'name',
         'email',
@@ -31,5 +33,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function guardName()
+    {
+        return "web";
     }
 }

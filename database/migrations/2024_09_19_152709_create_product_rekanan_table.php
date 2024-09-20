@@ -11,14 +11,13 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('product_rekanan', function (Blueprint $table) {
-            $table->id();
             $table->unsignedBigInteger('rekanan_id');
             $table->unsignedBigInteger('product_id');
-            $table->timestamps();
-            $table->softDeletes();
 
             $table->foreign('rekanan_id')->references('id')->on('mstrekanan')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('mstbarang')->onDelete('cascade');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

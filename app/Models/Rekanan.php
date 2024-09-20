@@ -56,7 +56,6 @@ class Rekanan extends Model
 
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class, 'product_rekanan', 'product_id')
-            ->withPivot('product_id');
+        return $this->belongsToMany(Product::class);
     }
 }
