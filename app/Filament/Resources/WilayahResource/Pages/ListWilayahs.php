@@ -1,25 +1,24 @@
 <?php
 
-namespace App\Filament\Resources\CategoryResource\Pages;
+namespace App\Filament\Resources\WilayahResource\Pages;
 
-use App\Filament\Resources\CategoryResource;
+use App\Filament\Resources\WilayahResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Filament\Notifications\Notification;
 
-class ListCategories extends ListRecords
+class ListWilayahs extends ListRecords
 {
-    protected static string $resource = CategoryResource::class;
-
-    protected static ?string $title = 'Kategori Barang';
+    protected static string $resource = WilayahResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make()
                 ->mutateFormDataUsing(function (array $data): array {
+                    $data['kode'] = IdGenerator::generate(['table' => 'mstwilayah', 'field' => 'kode', 'length' => 5, 'prefix' => 'RG-']);
                     $data['created_by'] = Auth() ? Auth()->user()->name : null;
-
                     return $data;
                 })
                 ->successNotification(
@@ -27,7 +26,7 @@ class ListCategories extends ListRecords
                         ->success()
                         ->color(color: 'success')
                         ->title('Created Successfully')
-                        ->body('Data Kategori baru berhasil dibuat!')
+                        ->body('Data Wilayah baru berhasil dibuat!')
                 ),
         ];
     }

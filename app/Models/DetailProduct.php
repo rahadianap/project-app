@@ -18,7 +18,7 @@ class DetailProduct extends Model
     protected $table = 'dbo.mstdetailbarang';
 
     protected $fillable = [
-        'kode',
+        'product_id',
         'kodetoko',
         'kodewilayah',
         'saldoawal',

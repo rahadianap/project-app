@@ -2,46 +2,48 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ProductResource\Pages;
-use App\Filament\Resources\ProductResource\RelationManagers;
-use App\Models\Product;
+use App\Filament\Resources\TokoResource\Pages;
+use App\Filament\Resources\TokoResource\RelationManagers;
+use App\Models\Toko;
 use Filament\Forms;
-use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\DatePicker;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Model;
-use Pelmered\FilamentMoneyField\Forms\Components\MoneyInput;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class ProductResource extends Resource
+class TokoResource extends Resource
 {
-    protected static ?string $model = Product::class;
+    protected static ?string $model = Toko::class;
 
+    protected static ?string $slug = '/toko';
 
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 13;
 
     protected static ?string $navigationGroup = 'Master Data';
 
-    protected static ?string $navigationLabel = 'Barang';
+    protected static ?string $navigationLabel = 'Toko';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Section::make('Data Barang')
+                Section::make('Data Toko')
                     ->collapsible(true)
                     ->schema([
-                        Fieldset::make('Data Barang')
+                        Fieldset::make('Data Toko')
                             ->schema([
                                 TextInput::make('kode')
                                     ->label(__('Kode Barang'))
@@ -49,45 +51,43 @@ class ProductResource extends Resource
                                     ->disabled()
                                     ->maxLength(30)
                                     ->visibleOn(['view', 'edit']),
-                                TextInput::make('kodebarcode')
-                                    ->label(__('Kode Barcode'))
-                                    ->numeric()
-                                    ->required()
+                                Select::make('wilayah_id')
+                                    ->relationship('region', 'nama')
+                                    ->label('Wilayah')
+                                    ->searchable()
+                                    ->preload(),
+                                TextInput::make('npwp')
+                                    ->label(__('NPWP'))
                                     ->maxLength(length: 30),
                                 TextInput::make('nama')
-                                    ->label(__('Nama Barang'))
+                                    ->label(__('Nama Toko'))
                                     ->required()
                                     ->maxLength(length: 100),
-                                TextInput::make('namaalias')
-                                    ->label(__('Alias'))
-                                    ->maxLength(length: 100),
-                                TextInput::make('merk')
-                                    ->label(__('Merk Barang'))
-                                    ->maxLength(length: 20),
-                                Select::make('unit_id')
-                                    ->relationship('unit', 'nama')
-                                    ->label('Satuan')
-                                    ->searchable()
-                                    ->preload(),
-                                Select::make('category_id')
-                                    ->relationship('category', 'nama')
-                                    ->label('Kategori')
-                                    ->searchable()
-                                    ->preload(),
-                                TextInput::make('ukuran')
-                                    ->label(__('Ukuran'))
-                                    ->numeric()
-                                    ->suffix('gram')
-                                    ->maxLength(length: 20),
-                                Grid::make()->schema([
-                                    Toggle::make('pajak')
-                                        ->label(__('Barang Kena Pajak'))
-                                        ->required(),
-                                    Toggle::make('isaktif')
-                                        ->label(__('Barang Aktif'))
-                                        ->default(1)
-                                        ->required(),
-                                ]),
+                                TextInput::make('alamat')
+                                    ->label(__('Alamat Toko')),
+                                DatePicker::make('tgl_pengukuhan')
+                                    ->label(__('Tanggal Pengukuhan'))
+                                    ->maxDate(now()),
+                                TextInput::make('notelepon')
+                                    ->label(__('Nomor Telepon'))
+                                    ->tel()
+                                    ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/')
+                                    ->maxLength(length: 15),
+                                TextInput::make('nowa')
+                                    ->label(__('Nomor WA'))
+                                    ->tel()
+                                    ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/')
+                                    ->maxLength(length: 15),
+                                TextInput::make('email')
+                                    ->label(__('Email'))
+                                    ->email()
+                                    ->maxLength(length: 50),
+                                TextInput::make('fb')
+                                    ->label(__('Akun FB'))
+                                    ->maxLength(length: 50),
+                                TextInput::make('ig')
+                                    ->label(__('Akun IG'))
+                                    ->maxLength(length: 50),
                             ]),
                     ]),
             ]);
@@ -98,19 +98,15 @@ class ProductResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('kode')
-                    ->label(__('Kode Barang'))
-                    ->sortable()
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('kodebarcode')
-                    ->label(__('Barcode'))
+                    ->label(__('Kode Toko'))
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('nama')
-                    ->label(__('Nama Barang'))
+                    ->label(__('Nama Toko'))
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('category.nama')
-                    ->label(__('Kategori'))
+                Tables\Columns\TextColumn::make('region.nama')
+                    ->label(__('Wilayah'))
                     ->sortable()
                     ->searchable(),
             ])
@@ -152,18 +148,17 @@ class ProductResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\DetailsRelationManager::class,
-            RelationManagers\RekanansRelationManager::class,
+            //
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListProducts::route('/'),
-            'create' => Pages\CreateProduct::route('/create'),
-            'view' => Pages\ViewProduct::route('/{record}'),
-            'edit' => Pages\EditProduct::route('/{record}/edit'),
+            'index' => Pages\ListTokos::route('/'),
+            'create' => Pages\CreateToko::route('/create'),
+            'view' => Pages\ViewToko::route('/{record}'),
+            'edit' => Pages\EditToko::route('/{record}/edit'),
         ];
     }
 

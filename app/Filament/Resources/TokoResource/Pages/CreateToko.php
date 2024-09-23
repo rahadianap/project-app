@@ -1,17 +1,16 @@
 <?php
 
-namespace App\Filament\Resources\ProductResource\Pages;
+namespace App\Filament\Resources\TokoResource\Pages;
 
-use App\Filament\Resources\ProductResource;
-use App\Models\DetailProduct;
-use Filament\Resources\Pages\CreateRecord;
+use App\Filament\Resources\TokoResource;
+use Filament\Actions;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Filament\Notifications\Notification;
-use Illuminate\Database\Eloquent\Model;
+use Filament\Resources\Pages\CreateRecord;
 
-class CreateProduct extends CreateRecord
+class CreateToko extends CreateRecord
 {
-    protected static string $resource = ProductResource::class;
+    protected static string $resource = TokoResource::class;
 
     protected function getRedirectUrl(): string
     {
@@ -20,7 +19,7 @@ class CreateProduct extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $data['kode'] = IdGenerator::generate(['table' => 'mstbarang', 'field' => 'kode', 'length' => 8, 'prefix' => 'PRD-']);
+        $data['kode'] = IdGenerator::generate(['table' => 'msttoko', 'field' => 'kode', 'length' => 6, 'prefix' => 'TK-']);
         $data['created_by'] = Auth() ? Auth()->user()->name : null;
         return $data;
     }
@@ -31,6 +30,6 @@ class CreateProduct extends CreateRecord
             ->success()
             ->color(color: 'success')
             ->title('Created Successfully')
-            ->body('Data Barang baru berhasil dibuat!');
+            ->body('Data Toko baru berhasil dibuat!');
     }
 }

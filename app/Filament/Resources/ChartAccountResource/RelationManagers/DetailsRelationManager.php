@@ -20,12 +20,6 @@ class DetailsRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                TextInput::make('nomoraccount')
-                    ->label(__('Nomor Akun'))
-                    ->required()
-                    ->disabled()
-                    ->maxLength(30)
-                    ->visibleOn(['view', 'edit']),
                 Select::make('posisi')
                     ->label('Posisi Akun')
                     ->options([
@@ -49,8 +43,8 @@ class DetailsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('nomoraccount')
             ->columns([
-                Tables\Columns\TextColumn::make('chart_account_id')
-                    ->label(__('Nomor Akun')),
+                Tables\Columns\TextColumn::make('kodetoko')
+                    ->label(__('Kode Toko')),
             ])
             ->filters([
                 //

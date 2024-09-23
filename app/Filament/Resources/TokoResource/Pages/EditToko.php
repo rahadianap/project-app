@@ -1,17 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\ProductResource\Pages;
+namespace App\Filament\Resources\TokoResource\Pages;
 
-use App\Filament\Resources\ProductResource;
+use App\Filament\Resources\TokoResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
-use App\Models\DetailProduct;
-use Illuminate\Database\Eloquent\Model;
 use Filament\Notifications\Notification;
 
-class EditProduct extends EditRecord
+class EditToko extends EditRecord
 {
-    protected static string $resource = ProductResource::class;
+    protected static string $resource = TokoResource::class;
 
     protected function getHeaderActions(): array
     {
@@ -27,22 +25,12 @@ class EditProduct extends EditRecord
         return $this->getResource()::getUrl('index');
     }
 
-    protected function handleRecordUpdate(Model $record, array $data): Model
-    {
-        $detail = DetailProduct::find($record['id']);
-
-        $detail->update($data);
-        $record->update($data);
-
-        return $record;
-    }
-
     protected function getSavedNotification(): ?Notification
     {
         return Notification::make()
             ->success()
             ->color('success')
             ->title('Updated Successfully')
-            ->body('Data Barang berhasil diubah!');
+            ->body('Data Toko berhasil diubah!');
     }
 }
