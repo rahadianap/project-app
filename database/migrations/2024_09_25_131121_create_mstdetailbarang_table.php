@@ -10,22 +10,20 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('msttarifpajak', function (Blueprint $table) {
+        Schema::create('mstdetailbarang', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('product_id')->nullable();
             $table->unsignedBigInteger('wilayah_id')->nullable();
             $table->unsignedBigInteger('toko_id')->nullable();
-            $table->integer('ppn')->nullable();
-            $table->integer('ppnbm')->nullable();
-            $table->integer('pphfinal')->nullable();
-            $table->integer('pphpsl21')->nullable();
-            $table->integer('pphpsl22')->nullable();
-            $table->integer('pphpsl23')->nullable();
-            $table->integer('pphpsl24')->nullable();
-            $table->integer('pphpsl25')->nullable();
-            $table->integer('pphpsl26')->nullable();
-            $table->integer('pphpsl29')->nullable();
-            $table->bigInteger('penanda');
-            $table->boolean('is_journal')->nullable()->default(false);
+            $table->bigInteger('saldoawal');
+            $table->decimal('hargajualkarton', 10, 2)->nullable();
+            $table->decimal('hargajualeceran', 10, 2)->nullable();
+            $table->decimal('hargabelikarton', 10, 2)->nullable();
+            $table->decimal('hargabelieceran', 10, 2)->nullable();
+            $table->decimal('hargapokokavgkarton', 10, 2)->nullable();
+            $table->decimal('hargapokokavgeceran', 10, 2)->nullable();
+            $table->decimal('hargapokokfifokarton', 10, 2)->nullable();
+            $table->decimal('hargapokokfifoeceran', 10, 2)->nullable();
             $table->string('userakses', 50)->nullable();
             $table->string('logakses', 50)->nullable();
             $table->boolean('statusupload')->default(false);
@@ -40,6 +38,7 @@ return new class extends Migration {
 
             $table->foreign('wilayah_id')->references('id')->on('mstwilayah')->onDelete('cascade');
             $table->foreign('toko_id')->references('id')->on('msttoko');
+            $table->foreign('product_id')->references('id')->on('mstbarang');
         });
     }
 
@@ -48,6 +47,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('msttarifpajak');
+        Schema::dropIfExists('mstdetailbarang');
     }
 };

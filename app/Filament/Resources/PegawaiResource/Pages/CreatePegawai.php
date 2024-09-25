@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Filament\Resources\TarifPajakResource\Pages;
+namespace App\Filament\Resources\PegawaiResource\Pages;
 
-use App\Filament\Resources\TarifPajakResource;
+use App\Filament\Resources\PegawaiResource;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Filament\Notifications\Notification;
 
-class CreateTarifPajak extends CreateRecord
+class CreatePegawai extends CreateRecord
 {
-    protected static string $resource = TarifPajakResource::class;
+    protected static string $resource = PegawaiResource::class;
 
     protected function getRedirectUrl(): string
     {
@@ -19,8 +19,7 @@ class CreateTarifPajak extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $nextAutoIncrement = TarifPajakResource::getModel()::max('id') + 1;
-        $data['penanda'] = $nextAutoIncrement;
+        $data['kode'] = IdGenerator::generate(['table' => 'mstpegawai', 'field' => 'kode', 'length' => 8, 'prefix' => 'PGW-']);
         $data['created_by'] = Auth() ? Auth()->user()->name : null;
         return $data;
     }
@@ -31,6 +30,6 @@ class CreateTarifPajak extends CreateRecord
             ->success()
             ->color(color: 'success')
             ->title('Created Successfully')
-            ->body('Data Tarif Pajak baru berhasil dibuat!');
+            ->body('Data Pegawai baru berhasil dibuat!');
     }
 }

@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\DepartemenResource\Pages;
+namespace App\Filament\Resources\JabatanResource\Pages;
 
-use App\Filament\Resources\DepartemenResource;
+use App\Filament\Resources\JabatanResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Notifications\Notification;
 
-class ListDepartemens extends ListRecords
+class ListJabatans extends ListRecords
 {
-    protected static string $resource = DepartemenResource::class;
+    protected static string $resource = JabatanResource::class;
 
     protected function getHeaderActions(): array
     {
@@ -24,7 +24,7 @@ class ListDepartemens extends ListRecords
                         ->success()
                         ->color(color: 'success')
                         ->title('Created Successfully')
-                        ->body('Data Departemen baru berhasil dibuat!')
+                        ->body('Data Jabatan baru berhasil dibuat!')
                 ),
         ];
     }

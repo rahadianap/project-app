@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\WilayahResource\Pages;
-use App\Filament\Resources\WilayahResource\RelationManagers;
-use App\Models\Wilayah;
+use App\Filament\Resources\JabatanResource\Pages;
+use App\Filament\Resources\JabatanResource\RelationManagers;
+use App\Models\Jabatan;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -17,17 +17,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class WilayahResource extends Resource
+class JabatanResource extends Resource
 {
-    protected static ?string $model = Wilayah::class;
+    protected static ?string $model = Jabatan::class;
 
 
 
-    protected static ?int $navigationSort = 12;
+    protected static ?string $slug = '/jabatan';
+
+    protected static ?int $navigationSort = 17;
 
     protected static ?string $navigationGroup = 'Master Data';
 
-    protected static ?string $navigationLabel = 'Wilayah';
+    protected static ?string $navigationLabel = 'Jabatan';
 
     public static function form(Form $form): Form
     {
@@ -36,9 +38,9 @@ class WilayahResource extends Resource
                 Card::make()
                     ->schema([
                         TextInput::make('nama')
-                            ->label(__('Nama Wilayah'))
+                            ->label(__('Nama Jabatan'))
                             ->required()
-                            ->maxLength(length: 50),
+                            ->maxLength(length: 20),
                     ])
             ]);
     }
@@ -48,7 +50,7 @@ class WilayahResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make(name: 'nama')
-                    ->label(__('Nama Wilayah'))
+                    ->label(label: __('Nama Jabatan'))
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -77,7 +79,7 @@ class WilayahResource extends Resource
                             ->success()
                             ->color(color: 'success')
                             ->title('Updated Successfully')
-                            ->body('Data Wilayah berhasil diubah!')
+                            ->body('Data Jabatan berhasil diubah!')
                     ),
                 Tables\Actions\DeleteAction::make()
                     ->after(function (Model $record): Model {
@@ -90,7 +92,7 @@ class WilayahResource extends Resource
                             ->success()
                             ->color('danger')
                             ->title('Deleted Successfully')
-                            ->body('Data Wilayah berhasil dihapus!'),
+                            ->body('Data Jabatan berhasil dihapus!'),
                     ),
             ])
             ->bulkActions([
@@ -105,15 +107,14 @@ class WilayahResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\StoresRelationManager::class,
+            //
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListWilayahs::route('/'),
-            'view' => Pages\ViewWilayah::route('/{record}'),
+            'index' => Pages\ListJabatans::route('/'),
         ];
     }
 

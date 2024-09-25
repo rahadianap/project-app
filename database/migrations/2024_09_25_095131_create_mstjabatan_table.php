@@ -10,17 +10,9 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('mstbarang', function (Blueprint $table) {
+        Schema::create('mstjabatan', function (Blueprint $table) {
             $table->id();
-            $table->string('kode', 30)->unique();
-            $table->string('kodebarcode', length: 30)->unique();
-            $table->string('nama', length: 100);
-            $table->string('namaalias', 100)->nullable();
-            $table->string('merk', 20)->nullable();
-            $table->unsignedBigInteger('unit_id')->nullable();
-            $table->unsignedBigInteger('category_id')->nullable();
-            $table->string('ukuran', 20)->nullable();
-            $table->boolean('pajak')->default(false);
+            $table->string('nama', 50)->unique();
             $table->string('userakses', 50)->nullable();
             $table->string('logakses', 50)->nullable();
             $table->boolean('statusupload')->default(false);
@@ -32,9 +24,6 @@ return new class extends Migration {
             $table->string('deleted_by', 20)->nullable();
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('category_id')->references('id')->on('mstkategoribarang')->onDelete('cascade');
-            $table->foreign('unit_id')->references('id')->on('mstsatuan')->onDelete('cascade');
         });
     }
 
@@ -43,6 +32,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('mstbarang');
+        Schema::dropIfExists('mstjabatan');
     }
 };

@@ -10,17 +10,12 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('mstbarang', function (Blueprint $table) {
+        Schema::create('msthakkasbank', function (Blueprint $table) {
             $table->id();
-            $table->string('kode', 30)->unique();
-            $table->string('kodebarcode', length: 30)->unique();
-            $table->string('nama', length: 100);
-            $table->string('namaalias', 100)->nullable();
-            $table->string('merk', 20)->nullable();
-            $table->unsignedBigInteger('unit_id')->nullable();
-            $table->unsignedBigInteger('category_id')->nullable();
-            $table->string('ukuran', 20)->nullable();
-            $table->boolean('pajak')->default(false);
+            $table->unsignedBigInteger('pegawai_id')->nullable();
+            $table->unsignedBigInteger('chart_account_id')->nullable();
+            $table->unsignedBigInteger('wilayah_id')->nullable();
+            $table->unsignedBigInteger('toko_id')->nullable();
             $table->string('userakses', 50)->nullable();
             $table->string('logakses', 50)->nullable();
             $table->boolean('statusupload')->default(false);
@@ -33,8 +28,10 @@ return new class extends Migration {
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('category_id')->references('id')->on('mstkategoribarang')->onDelete('cascade');
-            $table->foreign('unit_id')->references('id')->on('mstsatuan')->onDelete('cascade');
+            $table->foreign('chart_account_id')->references('id')->on('mstchartaccount');
+            $table->foreign('pegawai_id')->references('id')->on('mstpegawai');
+            $table->foreign('wilayah_id')->references('id')->on('mstwilayah');
+            $table->foreign('toko_id')->references('id')->on('msttoko');
         });
     }
 
@@ -43,6 +40,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('mstbarang');
+        Schema::dropIfExists('msthakkasbank');
     }
 };

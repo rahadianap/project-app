@@ -21,7 +21,15 @@ class DepartemenResource extends Resource
 {
     protected static ?string $model = Departemen::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+
+    protected static ?string $slug = '/Departemen';
+
+    protected static ?int $navigationSort = 15;
+
+    protected static ?string $navigationGroup = 'Master Data';
+
+    protected static ?string $navigationLabel = 'Departemen';
 
     public static function form(Form $form): Form
     {
@@ -71,7 +79,7 @@ class DepartemenResource extends Resource
                             ->success()
                             ->color(color: 'success')
                             ->title('Updated Successfully')
-                            ->body('Data Wilayah berhasil diubah!')
+                            ->body('Data Departemen berhasil diubah!')
                     ),
                 Tables\Actions\DeleteAction::make()
                     ->after(function (Model $record): Model {
@@ -84,7 +92,7 @@ class DepartemenResource extends Resource
                             ->success()
                             ->color('danger')
                             ->title('Deleted Successfully')
-                            ->body('Data Wilayah berhasil dihapus!'),
+                            ->body('Data Departemen berhasil dihapus!'),
                     ),
             ])
             ->bulkActions([

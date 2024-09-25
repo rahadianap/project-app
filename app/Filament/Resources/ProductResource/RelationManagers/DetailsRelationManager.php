@@ -2,14 +2,19 @@
 
 namespace App\Filament\Resources\ProductResource\RelationManagers;
 
+use App\Models\Wilayah;
 use Filament\Forms;
+use App\Models\Toko;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Pelmered\FilamentMoneyField\Forms\Components\MoneyInput;
+use Filament\Support\RawJs;
+use Filament\Notifications\Notification;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -23,57 +28,75 @@ class DetailsRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                TextInput::make('kodetoko')
-                    ->label(__('Kode Toko'))
-                    ->maxLength(length: 100),
-                TextInput::make('kodewilayah')
-                    ->label(__('Kode Wilayah'))
-                    ->maxLength(length: 100),
+                Select::make('wilayah_id')
+                    ->label('Wilayah')
+                    ->relationship('db_wilayah', 'nama')
+                    ->reactive()
+                    ->searchable()
+                    ->afterStateUpdated(fn(callable $set): mixed => $set('toko_id', null))
+                    ->preload(),
+                Select::make('toko_id')
+                    ->options(function (Forms\Get $get) {
+                        return Toko::where('wilayah_id', $get('wilayah_id'))->pluck('nama', 'id')->toArray();
+                    })
+                    ->label('Toko')
+                    ->searchable(),
                 TextInput::make('saldoawal')
                     ->label(__('Saldo Awal'))
+                    ->prefix('Rp.')
+                    ->mask(RawJs::make('$money($input)'))
+                    ->stripCharacters(',')
                     ->numeric(),
                 Grid::make()
                     ->schema([
-                        MoneyInput::make('hargajualkarton')
+                        TextInput::make('hargajualkarton')
                             ->label(__('Harga Jual (Karton)'))
-                            ->currency('IDR')
-                            ->locale('id_ID')
-                            ->minValue(0),
-                        MoneyInput::make('hargajualeceran')
+                            ->prefix('Rp.')
+                            ->mask(RawJs::make('$money($input)'))
+                            ->stripCharacters(',')
+                            ->numeric(),
+                        TextInput::make('hargajualeceran')
                             ->label(__('Harga Jual (Eceran)'))
-                            ->currency('IDR')
-                            ->locale('id_ID')
-                            ->minValue(0),
-                        MoneyInput::make('hargabelikarton')
+                            ->prefix('Rp.')
+                            ->mask(RawJs::make('$money($input)'))
+                            ->stripCharacters(',')
+                            ->numeric(),
+                        TextInput::make('hargabelikarton')
                             ->label(__('Harga Beli (Karton)'))
-                            ->currency('IDR')
-                            ->locale('id_ID')
-                            ->minValue(0),
-                        MoneyInput::make('hargabelieceran')
+                            ->prefix('Rp.')
+                            ->mask(RawJs::make('$money($input)'))
+                            ->stripCharacters(',')
+                            ->numeric(),
+                        TextInput::make('hargabelieceran')
                             ->label(__('Harga Beli (Eceran)'))
-                            ->currency('IDR')
-                            ->locale('id_ID')
-                            ->minValue(0),
-                        MoneyInput::make('hargapokokavgkarton')
+                            ->prefix('Rp.')
+                            ->mask(RawJs::make('$money($input)'))
+                            ->stripCharacters(',')
+                            ->numeric(),
+                        TextInput::make('hargapokokavgkarton')
                             ->label(__('Harga Pokok Avg (Karton)'))
-                            ->currency('IDR')
-                            ->locale('id_ID')
-                            ->minValue(0),
-                        MoneyInput::make('hargapokokavgeceran')
+                            ->prefix('Rp.')
+                            ->mask(RawJs::make('$money($input)'))
+                            ->stripCharacters(',')
+                            ->numeric(),
+                        TextInput::make('hargapokokavgeceran')
                             ->label(__('Harga Pokok Avg (Eceran)'))
-                            ->currency('IDR')
-                            ->locale('id_ID')
-                            ->minValue(0),
-                        MoneyInput::make('hargapokokfifokarton')
+                            ->prefix('Rp.')
+                            ->mask(RawJs::make('$money($input)'))
+                            ->stripCharacters(',')
+                            ->numeric(),
+                        TextInput::make('hargapokokfifokarton')
                             ->label(__('Harga Pokok FIFO (Karton)'))
-                            ->currency('IDR')
-                            ->locale('id_ID')
-                            ->minValue(0),
-                        MoneyInput::make('hargapokokfifoeceran')
+                            ->prefix('Rp.')
+                            ->mask(RawJs::make('$money($input)'))
+                            ->stripCharacters(',')
+                            ->numeric(),
+                        TextInput::make('hargapokokfifoeceran')
                             ->label(__('Harga Pokok FIFO (Eceran)'))
-                            ->currency('IDR')
-                            ->locale('id_ID')
-                            ->minValue(0)
+                            ->prefix('Rp.')
+                            ->mask(RawJs::make('$money($input)'))
+                            ->stripCharacters(',')
+                            ->numeric(),
                     ])
             ]);
     }
@@ -83,10 +106,10 @@ class DetailsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('product_id')
             ->columns([
-                Tables\Columns\TextColumn::make('kodetoko')
-                    ->label('Kode Toko'),
-                Tables\Columns\TextColumn::make('kodewilayah')
+                Tables\Columns\TextColumn::make('db_wilayah.nama')
                     ->label('Kode Wilayah'),
+                Tables\Columns\TextColumn::make('db_toko.nama')
+                    ->label('Kode Toko'),
                 Tables\Columns\TextColumn::make('saldoawal')
                     ->label('Saldo Awal'),
             ])
@@ -94,11 +117,61 @@ class DetailsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()
+                    ->mutateFormDataUsing(function (array $data): array {
+                        $data['created_by'] = Auth() ? Auth()->user()->name : null;
+
+                        return $data;
+                    })
+                    ->successNotification(
+                        Notification::make()
+                            ->success()
+                            ->color(color: 'success')
+                            ->title('Created Successfully')
+                            ->body('Data Detail Barang baru berhasil dibuat!')
+                    )
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->mutateFormDataUsing(function (array $data): array {
+                        $data['updated_by'] = Auth() ? Auth()->user()->name : null;
+
+                        return $data;
+                    })
+                    ->successNotification(
+                        Notification::make()
+                            ->success()
+                            ->color(color: 'success')
+                            ->title('Updated Successfully')
+                            ->body('Data Detail Barang baru berhasil diubah!')
+                    ),
+                Tables\Actions\DeleteAction::make()
+                    ->mutateFormDataUsing(function (array $data): array {
+                        $data['deleted_by'] = Auth() ? Auth()->user()->name : null;
+
+                        return $data;
+                    })
+                    ->successNotification(
+                        Notification::make()
+                            ->success()
+                            ->color(color: 'success')
+                            ->title('Deleted Successfully')
+                            ->body('Data Detail Barang baru berhasil dihapus!')
+                    ),
+                Tables\Actions\RestoreAction::make()
+                    ->mutateFormDataUsing(function (array $data): array {
+                        $data['deleted_by'] = null;
+
+                        return $data;
+                    })
+                    ->successNotification(
+                        Notification::make()
+                            ->success()
+                            ->color(color: 'success')
+                            ->title('Restored Successfully')
+                            ->body('Data Detail Barang baru berhasil dipulihkan!')
+                    ),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

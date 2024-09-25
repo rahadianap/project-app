@@ -2,32 +2,36 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\WilayahResource\Pages;
-use App\Filament\Resources\WilayahResource\RelationManagers;
-use App\Models\Wilayah;
+use App\Filament\Resources\HakKasBankResource\Pages;
+use App\Filament\Resources\HakKasBankResource\RelationManagers;
+use App\Models\HakKasBank;
+use App\Models\Toko;
 use Filament\Forms;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Forms\Components\Card;
 use Filament\Notifications\Notification;
-use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class WilayahResource extends Resource
+class HakKasBankResource extends Resource
 {
-    protected static ?string $model = Wilayah::class;
+    protected static ?string $model = HakKasBank::class;
 
 
 
-    protected static ?int $navigationSort = 12;
+    protected static ?string $slug = '/hak-kas-bank';
+
+    protected static ?int $navigationSort = 16;
 
     protected static ?string $navigationGroup = 'Master Data';
 
-    protected static ?string $navigationLabel = 'Wilayah';
+    protected static ?string $navigationLabel = 'Hak Kas Bank';
 
     public static function form(Form $form): Form
     {
@@ -35,10 +39,32 @@ class WilayahResource extends Resource
             ->schema([
                 Card::make()
                     ->schema([
-                        TextInput::make('nama')
-                            ->label(__('Nama Wilayah'))
-                            ->required()
-                            ->maxLength(length: 50),
+                        Grid::make()
+                            ->schema([
+                                Select::make('pegawai_id')
+                                    ->relationship('hkb_pegawai', 'nama')
+                                    ->label('Nama Pegawai')
+                                    ->searchable()
+                                    ->preload(),
+                                Select::make('chart_account_id')
+                                    ->relationship('hkb_coa', titleAttribute: 'nama')
+                                    ->label('Hak COA')
+                                    ->searchable()
+                                    ->preload(),
+                                Select::make('wilayah_id')
+                                    ->relationship('hkb_wilayah', 'nama')
+                                    ->label('Wilayah')
+                                    ->reactive()
+                                    ->searchable()
+                                    ->afterStateUpdated(fn(callable $set): mixed => $set('toko_id', null))
+                                    ->preload(),
+                                Select::make('toko_id')
+                                    ->options(function (Forms\Get $get) {
+                                        return Toko::where('wilayah_id', $get('wilayah_id'))->pluck('nama', 'id')->toArray();
+                                    })
+                                    ->label('Toko')
+                                    ->searchable(),
+                            ])
                     ])
             ]);
     }
@@ -47,9 +73,11 @@ class WilayahResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make(name: 'nama')
-                    ->label(__('Nama Wilayah'))
-                    ->sortable()
+                Tables\Columns\TextColumn::make(name: 'hkb_pegawai.nama')
+                    ->label(__('Nama Pegawai'))
+                    ->searchable(),
+                Tables\Columns\TextColumn::make(name: 'hkb_coa.nama')
+                    ->label(__('Hak COA'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('Created at'))
@@ -77,7 +105,7 @@ class WilayahResource extends Resource
                             ->success()
                             ->color(color: 'success')
                             ->title('Updated Successfully')
-                            ->body('Data Wilayah berhasil diubah!')
+                            ->body('Data Hak Kas Bank berhasil diubah!')
                     ),
                 Tables\Actions\DeleteAction::make()
                     ->after(function (Model $record): Model {
@@ -90,7 +118,7 @@ class WilayahResource extends Resource
                             ->success()
                             ->color('danger')
                             ->title('Deleted Successfully')
-                            ->body('Data Wilayah berhasil dihapus!'),
+                            ->body('Data Hak Kas Bank berhasil dihapus!'),
                     ),
             ])
             ->bulkActions([
@@ -105,15 +133,14 @@ class WilayahResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\StoresRelationManager::class,
+            //
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListWilayahs::route('/'),
-            'view' => Pages\ViewWilayah::route('/{record}'),
+            'index' => Pages\ListHakKasBanks::route('/'),
         ];
     }
 

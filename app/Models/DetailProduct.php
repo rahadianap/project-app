@@ -19,8 +19,8 @@ class DetailProduct extends Model
 
     protected $fillable = [
         'product_id',
-        'kodetoko',
-        'kodewilayah',
+        'wilayah_id',
+        'toko_id',
         'saldoawal',
         'hargajualkarton',
         'hargajualeceran',
@@ -49,6 +49,16 @@ class DetailProduct extends Model
 
     public function barang(): BelongsTo
     {
-        return $this->belongsTo(Product::class, 'kode');
+        return $this->belongsTo(Product::class, 'product_id');
+    }
+
+    public function db_wilayah(): BelongsTo
+    {
+        return $this->belongsTo(Wilayah::class, 'wilayah_id');
+    }
+
+    public function db_toko(): BelongsTo
+    {
+        return $this->belongsTo(Toko::class, 'toko_id');
     }
 }

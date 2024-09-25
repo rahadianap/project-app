@@ -119,13 +119,7 @@ class ProductResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make()
-                    ->after(function (Model $record): Model {
-                        $record->update(['updated_by' => Auth() ? Auth()->user()->name : null]);
-
-                        return $record;
-                    })
-                ,
+                Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make()
                     ->after(function (Model $record): Model {
                         $record->update(['deleted_by' => Auth() ? Auth()->user()->name : null]);
@@ -138,6 +132,19 @@ class ProductResource extends Resource
                             ->color('danger')
                             ->title('Deleted Successfully')
                             ->body('Data Barang berhasil dihapus!'),
+                    ),
+                Tables\Actions\RestoreAction::make()
+                    ->after(function (Model $record): Model {
+                        $record->update(['deleted_by' => null]);
+
+                        return $record;
+                    })
+                    ->successNotification(
+                        Notification::make()
+                            ->success()
+                            ->color('danger')
+                            ->title('Deleted Successfully')
+                            ->body('Data Barang berhasil dipulihkan!'),
                     ),
             ])
             ->bulkActions([
@@ -161,8 +168,8 @@ class ProductResource extends Resource
     {
         return [
             'index' => Pages\ListProducts::route('/'),
-            'create' => Pages\CreateProduct::route('/create'),
             'view' => Pages\ViewProduct::route('/{record}'),
+            'create' => Pages\CreateProduct::route('/create'),
             'edit' => Pages\EditProduct::route('/{record}/edit'),
         ];
     }

@@ -28,7 +28,7 @@ class TokoResource extends Resource
 
     protected static ?string $slug = '/toko';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
 
     protected static ?int $navigationSort = 13;
 

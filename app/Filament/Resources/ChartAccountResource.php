@@ -24,7 +24,7 @@ class ChartAccountResource extends Resource
 {
     protected static ?string $model = ChartAccount::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
 
     protected static ?int $navigationSort = 10;
 

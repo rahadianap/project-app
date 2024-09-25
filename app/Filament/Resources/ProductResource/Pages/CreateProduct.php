@@ -3,11 +3,9 @@
 namespace App\Filament\Resources\ProductResource\Pages;
 
 use App\Filament\Resources\ProductResource;
-use App\Models\DetailProduct;
 use Filament\Resources\Pages\CreateRecord;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Filament\Notifications\Notification;
-use Illuminate\Database\Eloquent\Model;
 
 class CreateProduct extends CreateRecord
 {

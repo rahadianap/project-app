@@ -51,7 +51,7 @@ class Product extends Model
 
     public function details(): HasMany
     {
-        return $this->hasMany(DetailProduct::class, 'id');
+        return $this->hasMany(DetailProduct::class);
     }
 
     public function category(): BelongsTo

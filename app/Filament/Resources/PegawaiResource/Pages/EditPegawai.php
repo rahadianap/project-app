@@ -1,18 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\ProductResource\Pages;
+namespace App\Filament\Resources\PegawaiResource\Pages;
 
-use App\Filament\Resources\ProductResource;
+use App\Filament\Resources\PegawaiResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
-use App\Models\DetailProduct;
-use Illuminate\Database\Eloquent\Model;
 use Filament\Notifications\Notification;
-use DB;
 
-class EditProduct extends EditRecord
+class EditPegawai extends EditRecord
 {
-    protected static string $resource = ProductResource::class;
+    protected static string $resource = PegawaiResource::class;
 
     protected function getHeaderActions(): array
     {
@@ -28,19 +25,12 @@ class EditProduct extends EditRecord
         return $this->getResource()::getUrl('index');
     }
 
-    protected function mutateFormDataBeforeSave(array $data): array
-    {
-        $data['updated_by'] = Auth() ? Auth()->user()->name : null;
-
-        return $data;
-    }
-
     protected function getSavedNotification(): ?Notification
     {
         return Notification::make()
             ->success()
             ->color('success')
             ->title('Updated Successfully')
-            ->body('Data Barang berhasil diubah!');
+            ->body('Data Pegawai berhasil diubah!');
     }
 }

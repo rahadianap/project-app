@@ -10,17 +10,18 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('mstbarang', function (Blueprint $table) {
+        Schema::create('mstpegawai', function (Blueprint $table) {
             $table->id();
             $table->string('kode', 30)->unique();
-            $table->string('kodebarcode', length: 30)->unique();
-            $table->string('nama', length: 100);
-            $table->string('namaalias', 100)->nullable();
-            $table->string('merk', 20)->nullable();
-            $table->unsignedBigInteger('unit_id')->nullable();
-            $table->unsignedBigInteger('category_id')->nullable();
-            $table->string('ukuran', 20)->nullable();
-            $table->boolean('pajak')->default(false);
+            $table->unsignedBigInteger('wilayah_id')->nullable();
+            $table->unsignedBigInteger('toko_id')->nullable();
+            $table->unsignedBigInteger('departemen_id')->nullable();
+            $table->unsignedBigInteger('jabatan_id')->nullable();
+            $table->string('nama', 50);
+            $table->string('alamat')->nullable();
+            $table->date('tgl_lahir')->nullable();
+            $table->date('tgl_gabung')->nullable();
+            $table->string('pendidikan', 10);
             $table->string('userakses', 50)->nullable();
             $table->string('logakses', 50)->nullable();
             $table->boolean('statusupload')->default(false);
@@ -33,8 +34,10 @@ return new class extends Migration {
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('category_id')->references('id')->on('mstkategoribarang')->onDelete('cascade');
-            $table->foreign('unit_id')->references('id')->on('mstsatuan')->onDelete('cascade');
+            $table->foreign('wilayah_id')->references('id')->on('mstwilayah');
+            $table->foreign('toko_id')->references('id')->on('msttoko');
+            $table->foreign('departemen_id')->references('id')->on('mstdepartement');
+            $table->foreign('jabatan_id')->references('id')->on('mstjabatan');
         });
     }
 
@@ -43,6 +46,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('mstbarang');
+        Schema::dropIfExists('mstpegawai');
     }
 };

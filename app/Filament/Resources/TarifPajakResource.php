@@ -26,7 +26,15 @@ class TarifPajakResource extends Resource
 {
     protected static ?string $model = TarifPajak::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+
+    protected static ?string $slug = '/tarif-pajak';
+
+    protected static ?int $navigationSort = 14;
+
+    protected static ?string $navigationGroup = 'Master Data';
+
+    protected static ?string $navigationLabel = 'Tarif Pajak';
 
     public static function form(Form $form): Form
     {
@@ -90,14 +98,9 @@ class TarifPajakResource extends Resource
                                     ->label(__('PPH Pasal 29'))
                                     ->numeric()
                                     ->maxLength(length: 10),
-                                Grid::make()->schema([
-                                    Toggle::make('pajak')
-                                        ->label(__('Barang Kena Pajak'))
-                                        ->required(),
-                                    Toggle::make('isaktif')
-                                        ->label(__('Barang Aktif'))
-                                        ->default(1)
-                                        ->required(),
+                                Grid::make()->schema(components: [
+                                    Toggle::make('is_journal')
+                                        ->label(__('Upload Jurnal')),
                                 ]),
                             ]),
                     ]),
@@ -108,13 +111,60 @@ class TarifPajakResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make(name: 'wilayah.nama')
+                    ->label(__('Wilayah'))
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make(name: 'ppn')
+                    ->label(__('PPN'))
+                    ->suffix(' %'),
+                Tables\Columns\TextColumn::make(name: 'ppnbm')
+                    ->label(__('PPNBM'))
+                    ->suffix(' %'),
+                Tables\Columns\TextColumn::make(name: 'pphfinal')
+                    ->label(__('PPH Final'))
+                    ->suffix(' %'),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label(__('Created at'))
+                    ->sortable()
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\RestoreAction::make()
+                    ->after(function (Model $record): Model {
+                        $record->update(['deleted_by' => null]);
+
+                        return $record;
+                    }),
+                Tables\Actions\EditAction::make()
+                    ->mutateFormDataUsing(function (array $data): array {
+                        $data['updated_by'] = Auth() ? Auth()->user()->name : null;
+
+                        return $data;
+                    })
+                    ->successNotification(
+                        Notification::make()
+                            ->success()
+                            ->color(color: 'success')
+                            ->title('Updated Successfully')
+                            ->body('Data Tarif Pajak berhasil diubah!')
+                    ),
+                Tables\Actions\DeleteAction::make()
+                    ->after(function (Model $record): Model {
+                        $record->update(['deleted_by' => Auth() ? Auth()->user()->name : null]);
+
+                        return $record;
+                    })
+                    ->successNotification(
+                        Notification::make()
+                            ->success()
+                            ->color('danger')
+                            ->title('Deleted Successfully')
+                            ->body('Data Tarif Pajak berhasil dihapus!'),
+                    ),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -137,7 +187,6 @@ class TarifPajakResource extends Resource
         return [
             'index' => Pages\ListTarifPajaks::route('/'),
             'create' => Pages\CreateTarifPajak::route('/create'),
-            'edit' => Pages\EditTarifPajak::route('/{record}/edit'),
         ];
     }
 
