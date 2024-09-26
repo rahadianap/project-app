@@ -3,10 +3,10 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\Kota;
+use App\Models\Wilayah;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class KotaPolicy
+class WilayahPolicy
 {
     use HandlesAuthorization;
 
@@ -15,15 +15,15 @@ class KotaPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_kota');
+        return $user->can('view_any_wilayah');
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Kota $kota): bool
+    public function view(User $user, Wilayah $wilayah): bool
     {
-        return $user->can('view_kota');
+        return $user->can('view_wilayah');
     }
 
     /**
@@ -31,23 +31,23 @@ class KotaPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('create_kota');
+        return $user->can('create_wilayah');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Kota $kota): bool
+    public function update(User $user, Wilayah $wilayah): bool
     {
-        return $user->can('update_kota');
+        return $user->can('update_wilayah');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Kota $kota): bool
+    public function delete(User $user, Wilayah $wilayah): bool
     {
-        return $user->can('delete_kota');
+        return $user->can('delete_wilayah');
     }
 
     /**
@@ -55,15 +55,15 @@ class KotaPolicy
      */
     public function deleteAny(User $user): bool
     {
-        return $user->can('delete_any_kota');
+        return $user->can('delete_any_wilayah');
     }
 
     /**
      * Determine whether the user can permanently delete.
      */
-    public function forceDelete(User $user, Kota $kota): bool
+    public function forceDelete(User $user, Wilayah $wilayah): bool
     {
-        return $user->can('force_delete_kota');
+        return $user->can('force_delete_wilayah');
     }
 
     /**
@@ -71,15 +71,15 @@ class KotaPolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('force_delete_any_kota');
+        return $user->can('force_delete_any_wilayah');
     }
 
     /**
      * Determine whether the user can restore.
      */
-    public function restore(User $user, Kota $kota): bool
+    public function restore(User $user, Wilayah $wilayah): bool
     {
-        return $user->can('restore_kota');
+        return $user->can('restore_wilayah');
     }
 
     /**
@@ -87,15 +87,15 @@ class KotaPolicy
      */
     public function restoreAny(User $user): bool
     {
-        return $user->can('restore_any_kota');
+        return $user->can('restore_any_wilayah');
     }
 
     /**
      * Determine whether the user can replicate.
      */
-    public function replicate(User $user, Kota $kota): bool
+    public function replicate(User $user, Wilayah $wilayah): bool
     {
-        return $user->can('replicate_kota');
+        return $user->can('replicate_wilayah');
     }
 
     /**
@@ -103,6 +103,6 @@ class KotaPolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_kota');
+        return $user->can('reorder_wilayah');
     }
 }

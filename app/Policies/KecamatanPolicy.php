@@ -2,14 +2,14 @@
 
 namespace App\Policies;
 
-use App\Models\Kecamatan;
 use App\Models\User;
+use App\Models\Kecamatan;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class KecamatanPolicy
 {
-
     use HandlesAuthorization;
+
     /**
      * Determine whether the user can view any models.
      */

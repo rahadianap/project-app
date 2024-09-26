@@ -3,10 +3,10 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\Kota;
+use App\Models\HakKasBank;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class KotaPolicy
+class HakKasBankPolicy
 {
     use HandlesAuthorization;
 
@@ -15,15 +15,15 @@ class KotaPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_kota');
+        return $user->can('view_any_hak::kas::bank');
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Kota $kota): bool
+    public function view(User $user, HakKasBank $hakKasBank): bool
     {
-        return $user->can('view_kota');
+        return $user->can('view_hak::kas::bank');
     }
 
     /**
@@ -31,23 +31,23 @@ class KotaPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('create_kota');
+        return $user->can('create_hak::kas::bank');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Kota $kota): bool
+    public function update(User $user, HakKasBank $hakKasBank): bool
     {
-        return $user->can('update_kota');
+        return $user->can('update_hak::kas::bank');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Kota $kota): bool
+    public function delete(User $user, HakKasBank $hakKasBank): bool
     {
-        return $user->can('delete_kota');
+        return $user->can('delete_hak::kas::bank');
     }
 
     /**
@@ -55,15 +55,15 @@ class KotaPolicy
      */
     public function deleteAny(User $user): bool
     {
-        return $user->can('delete_any_kota');
+        return $user->can('delete_any_hak::kas::bank');
     }
 
     /**
      * Determine whether the user can permanently delete.
      */
-    public function forceDelete(User $user, Kota $kota): bool
+    public function forceDelete(User $user, HakKasBank $hakKasBank): bool
     {
-        return $user->can('force_delete_kota');
+        return $user->can('force_delete_hak::kas::bank');
     }
 
     /**
@@ -71,15 +71,15 @@ class KotaPolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('force_delete_any_kota');
+        return $user->can('force_delete_any_hak::kas::bank');
     }
 
     /**
      * Determine whether the user can restore.
      */
-    public function restore(User $user, Kota $kota): bool
+    public function restore(User $user, HakKasBank $hakKasBank): bool
     {
-        return $user->can('restore_kota');
+        return $user->can('restore_hak::kas::bank');
     }
 
     /**
@@ -87,15 +87,15 @@ class KotaPolicy
      */
     public function restoreAny(User $user): bool
     {
-        return $user->can('restore_any_kota');
+        return $user->can('restore_any_hak::kas::bank');
     }
 
     /**
      * Determine whether the user can replicate.
      */
-    public function replicate(User $user, Kota $kota): bool
+    public function replicate(User $user, HakKasBank $hakKasBank): bool
     {
-        return $user->can('replicate_kota');
+        return $user->can('replicate_hak::kas::bank');
     }
 
     /**
@@ -103,6 +103,6 @@ class KotaPolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_kota');
+        return $user->can('reorder_hak::kas::bank');
     }
 }

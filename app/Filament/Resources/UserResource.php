@@ -33,8 +33,11 @@ class UserResource extends Resource
                     ->label('Username'),
                 TextInput::make('email')
                     ->label('Email'),
+                TextInput::make('password')
+                    ->label('Password'),
                 Forms\Components\Select::make('roles')
                     ->relationship('roles', 'name')
+                    ->multiple()
                     ->preload()
                     ->searchable()
             ]);

@@ -2,14 +2,14 @@
 
 namespace App\Policies;
 
-use App\Models\Unit;
 use App\Models\User;
+use App\Models\Unit;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class UnitPolicy
 {
-
     use HandlesAuthorization;
+
     /**
      * Determine whether the user can view any models.
      */

@@ -31,11 +31,11 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'nav.group' => 'Pengaturan',
-    'nav.role.label' => 'Role',
-    'nav.role.icon' => 'heroicon-o-shield-check',
-    'resource.label.role' => 'Role',
-    'resource.label.roles' => 'Role',
+    // 'nav.group' => 'Pengaturan',
+    // 'nav.role.label' => 'Role',
+    // 'nav.role.icon' => 'heroicon-o-shield-check',
+    // 'resource.label.role' => 'Role',
+    // 'resource.label.roles' => 'Role',
 
     /*
     |--------------------------------------------------------------------------
