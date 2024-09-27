@@ -5,7 +5,6 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Product;
-use Filament\Forms;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -16,17 +15,13 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Model;
-use Pelmered\FilamentMoneyField\Forms\Components\MoneyInput;
 
 class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
-
-
 
     protected static ?int $navigationSort = 1;
 
@@ -39,56 +34,53 @@ class ProductResource extends Resource
         return $form
             ->schema([
                 Section::make('Data Barang')
-                    ->collapsible(true)
+                    ->columns(2)
                     ->schema([
-                        Fieldset::make('Data Barang')
-                            ->schema([
-                                TextInput::make('kode')
-                                    ->label(__('Kode Barang'))
-                                    ->required()
-                                    ->disabled()
-                                    ->maxLength(30)
-                                    ->visibleOn(['view', 'edit']),
-                                TextInput::make('kodebarcode')
-                                    ->label(__('Kode Barcode'))
-                                    ->numeric()
-                                    ->required()
-                                    ->maxLength(length: 30),
-                                TextInput::make('nama')
-                                    ->label(__('Nama Barang'))
-                                    ->required()
-                                    ->maxLength(length: 100),
-                                TextInput::make('namaalias')
-                                    ->label(__('Alias'))
-                                    ->maxLength(length: 100),
-                                TextInput::make('merk')
-                                    ->label(__('Merk Barang'))
-                                    ->maxLength(length: 20),
-                                Select::make('unit_id')
-                                    ->relationship('unit', 'nama')
-                                    ->label('Satuan')
-                                    ->searchable()
-                                    ->preload(),
-                                Select::make('category_id')
-                                    ->relationship('category', 'nama')
-                                    ->label('Kategori')
-                                    ->searchable()
-                                    ->preload(),
-                                TextInput::make('ukuran')
-                                    ->label(__('Ukuran'))
-                                    ->numeric()
-                                    ->suffix('gram')
-                                    ->maxLength(length: 20),
-                                Grid::make()->schema([
-                                    Toggle::make('pajak')
-                                        ->label(__('Barang Kena Pajak'))
-                                        ->required(),
-                                    Toggle::make('isaktif')
-                                        ->label(__('Barang Aktif'))
-                                        ->default(1)
-                                        ->required(),
-                                ]),
-                            ]),
+                        TextInput::make('kode')
+                            ->label(__('Kode Barang'))
+                            ->required()
+                            ->disabled()
+                            ->maxLength(30)
+                            ->visibleOn(['view', 'edit']),
+                        TextInput::make('kodebarcode')
+                            ->label(__('Kode Barcode'))
+                            ->numeric()
+                            ->required()
+                            ->maxLength(length: 30),
+                        TextInput::make('nama')
+                            ->label(__('Nama Barang'))
+                            ->required()
+                            ->maxLength(length: 100),
+                        TextInput::make('namaalias')
+                            ->label(__('Alias'))
+                            ->maxLength(length: 100),
+                        TextInput::make('merk')
+                            ->label(__('Merk Barang'))
+                            ->maxLength(length: 20),
+                        Select::make('unit_id')
+                            ->relationship('unit', 'nama')
+                            ->label('Satuan')
+                            ->searchable()
+                            ->preload(),
+                        Select::make('category_id')
+                            ->relationship('category', 'nama')
+                            ->label('Kategori')
+                            ->searchable()
+                            ->preload(),
+                        TextInput::make('ukuran')
+                            ->label(__('Ukuran'))
+                            ->numeric()
+                            ->suffix('gram')
+                            ->maxLength(length: 20),
+                        Grid::make()->schema([
+                            Toggle::make('pajak')
+                                ->label(__('Barang Kena Pajak'))
+                                ->required(),
+                            Toggle::make('isaktif')
+                                ->label(__('Barang Aktif'))
+                                ->default(1)
+                                ->required(),
+                        ]),
                     ]),
             ]);
     }
@@ -142,8 +134,8 @@ class ProductResource extends Resource
                     ->successNotification(
                         Notification::make()
                             ->success()
-                            ->color('danger')
-                            ->title('Deleted Successfully')
+                            ->color('success')
+                            ->title('Restored Successfully')
                             ->body('Data Barang berhasil dipulihkan!'),
                     ),
             ])
@@ -168,8 +160,8 @@ class ProductResource extends Resource
     {
         return [
             'index' => Pages\ListProducts::route('/'),
-            'view' => Pages\ViewProduct::route('/{record}'),
             'create' => Pages\CreateProduct::route('/create'),
+            'view' => Pages\ViewProduct::route('/{record}'),
             'edit' => Pages\EditProduct::route('/{record}/edit'),
         ];
     }

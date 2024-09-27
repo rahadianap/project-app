@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\SetupAccountResource\Pages;
-use App\Filament\Resources\SetupAccountResource\RelationManagers;
+use App\Filament\Resources\SetupJurnalJualBeliResource\Pages;
+use App\Filament\Resources\SetupJurnalJualBeliResource\RelationManagers;
+use App\Models\SetupJurnalJualBeli;
 use App\Models\ChartAccount;
-use App\Models\SetupAccount;
 use Filament\Forms;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Grid;
@@ -21,15 +21,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class SetupAccountResource extends Resource
+class SetupJurnalJualBeliResource extends Resource
 {
-    protected static ?string $model = SetupAccount::class;
+    protected static ?string $model = SetupJurnalJualBeli::class;
 
-    protected static ?int $navigationSort = 20;
+    protected static ?int $navigationSort = 21;
 
     protected static ?string $navigationGroup = 'Master Data';
 
-    protected static ?string $navigationLabel = 'Setup Account';
+    protected static ?string $navigationLabel = 'Setup Jurnal Jual Beli';
 
     public static function form(Form $form): Form
     {
@@ -38,14 +38,16 @@ class SetupAccountResource extends Resource
                 Card::make()
                     ->schema([
                         Grid::make()
-                            ->columns(2)
+                            ->columns(3)
                             ->schema([
                                 Select::make('chart_account_id')
                                     ->label(__('COA'))
-                                    ->relationship('sa_coa', 'nomoraccount')
+                                    ->relationship('sj_coa', 'nomoraccount')
                                     ->options(ChartAccount::where('tipeaccount', 'ANAK')->pluck('nomoraccount', 'id')->toArray())
                                     ->required()
                                     ->searchable(),
+                                TextInput::make('namajurnal')
+                                    ->label(label: __(key: 'Nama Jurnal')),
                                 TextInput::make('jenistransaksi')
                                     ->label(label: __('Jenis Transaksi')),
                                 Checkbox::make('posisidebet')
@@ -61,8 +63,11 @@ class SetupAccountResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make(name: 'sa_coa.nomoraccount')
+                Tables\Columns\TextColumn::make(name: 'sj_coa.nomoraccount')
                     ->label(__('COA'))
+                    ->searchable(),
+                Tables\Columns\TextColumn::make(name: 'namajurnal')
+                    ->label(__('Nama Jurnal'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make(name: 'jenistransaksi')
                     ->label(__('Jenis Transaksi'))
@@ -73,7 +78,6 @@ class SetupAccountResource extends Resource
                 Tables\Columns\IconColumn::make(name: 'posisikredit')
                     ->label(__('Kredit'))
                     ->boolean()
-
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
@@ -97,7 +101,7 @@ class SetupAccountResource extends Resource
                             ->success()
                             ->color(color: 'success')
                             ->title('Updated Successfully')
-                            ->body('Data Setup Account berhasil diubah!')
+                            ->body('Data Setup Jurnal Jual Beli berhasil diubah!')
                     ),
                 Tables\Actions\DeleteAction::make()
                     ->after(function (Model $record): Model {
@@ -110,7 +114,7 @@ class SetupAccountResource extends Resource
                             ->success()
                             ->color('danger')
                             ->title('Deleted Successfully')
-                            ->body('Data Setup Account berhasil dihapus!'),
+                            ->body('Data Setup Jurnal Jual Beli berhasil dihapus!'),
                     ),
             ])
             ->bulkActions([
@@ -132,7 +136,7 @@ class SetupAccountResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSetupAccounts::route('/'),
+            'index' => Pages\ListSetupJurnalJualBelis::route('/'),
         ];
     }
 

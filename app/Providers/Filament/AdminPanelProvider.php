@@ -77,6 +77,7 @@ class AdminPanelProvider extends PanelProvider
                     ->label(label: 'Pengaturan')
                     ->icon('heroicon-o-cog-6-tooth'),
             ])
+            ->breadcrumbs(false)
             ->plugins([
                 BreezyCore::make(),
                 FilamentShieldPlugin::make()

@@ -2,11 +2,11 @@
 
 namespace App\Filament\Resources\ProductResource\RelationManagers;
 
-use App\Models\Wilayah;
 use Filament\Forms;
 use App\Models\Toko;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Form;
+use App\Filament\Resources\ProductResource;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -14,9 +14,6 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Support\RawJs;
 use Filament\Notifications\Notification;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class DetailsRelationManager extends RelationManager
 {
